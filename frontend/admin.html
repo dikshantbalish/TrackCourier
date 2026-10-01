@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="robots" content="noindex, nofollow" />
+		<meta name="theme-color" content="#f5f7f3" />
+		<title>Shipment Admin | Shree Balaji Couriers</title>
+		<link rel="stylesheet" href="css/admin.css" />
+		<script src="js/api.js" defer></script>
+		<script src="js/admin.js" defer></script>
+	</head>
+	<body>
+		<header class="admin-header">
+			<a class="admin-brand" href="index.html"
+				><span class="admin-brand-mark" aria-hidden="true">SB</span
+				><span>Shree Balaji <strong>Couriers</strong></span></a
+			>
+			<span class="admin-label">SHIPMENT ADMIN</span>
+		</header>
+		<main class="admin-main">
+			<section class="login-panel" id="login-panel" aria-labelledby="login-title">
+				<p class="admin-eyebrow">ADMINISTRATION</p>
+				<h1 id="login-title">Sign in</h1>
+				<p class="panel-intro">Sign in to manage shipment records.</p>
+				<form id="login-form" class="admin-form" novalidate>
+					<label for="admin-username">Username</label>
+					<input id="admin-username" name="username" type="text" autocomplete="username" required />
+					<label for="admin-password">Password</label>
+					<input
+						id="admin-password"
+						name="password"
+						type="password"
+						autocomplete="current-password"
+						required
+					/>
+					<p class="admin-message" id="login-message" role="alert" hidden></p>
+					<button class="admin-button admin-button-primary" type="submit">Sign in</button>
+				</form>
+			</section>
+
+			<section class="manager-panel" id="manager-panel" aria-labelledby="manager-title" hidden>
+				<div class="manager-heading">
+					<div>
+						<p class="admin-eyebrow">SHIPMENT RECORDS</p>
+						<h1 id="manager-title">Manage shipments</h1>
+					</div>
+					<button class="admin-button admin-button-secondary" id="logout-button" type="button">
+						Sign out
+					</button>
+				</div>
+				<p class="manager-intro">Create a shipment or update its latest customer-facing status.</p>
+				<form id="shipment-form" class="admin-form shipment-form" novalidate>
+					<input id="shipment-record-id" name="record_id" type="hidden" />
+					<div class="form-field">
+						<label for="shipment-tracking-id">Tracking ID</label
+						><input id="shipment-tracking-id" name="tracking_id" type="text" required />
+					</div>
+					<div class="form-field">
+						<label for="shipment-status">Status</label
+						><select id="shipment-status" name="status" required>
+							<option value="">Choose a status</option>
+							<option value="Booked">Booked</option>
+							<option value="Picked Up">Picked Up</option>
+							<option value="In Transit">In Transit</option>
+							<option value="Out for Delivery">Out for Delivery</option>
+							<option value="Delivered">Delivered</option>
+							<option value="Exception">Exception</option>
+						</select>
+					</div>
+					<div class="form-field form-field-wide">
+						<label for="shipment-location">Location <span>(optional)</span></label>
+						<input
+							id="shipment-location"
+							name="location"
+							type="text"
+							maxlength="120"
+							autocomplete="off"
+							placeholder="For example, Delhi"
+						/>
+					</div>
+					<div class="form-field form-field-wide">
+						<label for="shipment-description">Status update <span>(optional)</span></label
+						><textarea
+							id="shipment-description"
+							name="description"
+							rows="3"
+							placeholder="Customer-facing update"
+						></textarea>
+					</div>
+					<p class="admin-message form-field-wide" id="shipment-message" role="alert" hidden></p>
+					<div class="form-actions form-field-wide">
+						<button
+							class="admin-button admin-button-primary"
+							id="save-shipment-button"
+							type="submit"
+						>
+							Save shipment</button
+						><button
+							class="admin-button admin-button-secondary"
+							id="cancel-edit-button"
+							type="button"
+							hidden
+						>
+							Cancel edit
+						</button>
+					</div>
+				</form>
+				<div class="records-heading">
+					<h2>Current shipments</h2>
+					<button class="text-button" id="refresh-button" type="button">Refresh list</button>
+				</div>
+				<div class="records-tools" role="search">
+					<div class="records-tool records-search-field">
+						<label for="records-search">Search shipments</label>
+						<input
+							id="records-search"
+							type="search"
+							placeholder="Tracking ID, location, status"
+							autocomplete="off"
+						/>
+					</div>
+					<div class="records-tool">
+						<label for="records-status-filter">Status</label>
+						<select id="records-status-filter">
+							<option value="">All statuses</option>
+							<option value="Booked">Booked</option>
+							<option value="Picked Up">Picked Up</option>
+							<option value="In Transit">In Transit</option>
+							<option value="Out for Delivery">Out for Delivery</option>
+							<option value="Delivered">Delivered</option>
+							<option value="Exception">Exception</option>
+						</select>
+					</div>
+					<div class="records-tool">
+						<label for="records-sort">Sort by</label>
+						<select id="records-sort">
+							<option value="updated-desc">Recently updated</option>
+							<option value="updated-asc">Oldest update</option>
+							<option value="tracking-asc">Tracking ID A-Z</option>
+							<option value="status-asc">Status A-Z</option>
+						</select>
+					</div>
+				</div>
+				<p class="records-summary" id="records-summary" role="status" aria-live="polite"></p>
+				<p class="admin-message" id="records-message" role="status" hidden></p>
+				<div class="records-list" id="records-list" aria-live="polite"></div>
+			</section>
+		</main>
+		<footer class="admin-footer"><a href="index.html">Back to tracking page</a></footer>
+	</body>
+</html>

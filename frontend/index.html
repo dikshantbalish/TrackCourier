@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta
+			name="description"
+			content="Track your Shree Balaji Couriers shipment and view its latest available status."
+		/>
+		<meta property="og:title" content="Shree Balaji Couriers | Track Your Shipment" />
+		<meta
+			property="og:description"
+			content="Check the latest available status of your Shree Balaji Couriers shipment."
+		/>
+		<meta property="og:type" content="website" />
+		<meta name="theme-color" content="#f7f4ec" />
+		<title>Shree Balaji Couriers | Track Your Shipment</title>
+		<link rel="stylesheet" href="css/style.css" />
+		<script src="js/api.js" defer></script>
+		<script src="js/tracking.js" defer></script>
+	</head>
+	<body>
+		<header class="site-header">
+			<a class="wordmark" href="#top" aria-label="Shree Balaji Couriers home">
+				<span class="wordmark-mark" aria-hidden="true">SB</span>
+				<span class="wordmark-copy"><span class="wordmark-name">Shree Balaji</span><strong>COURIERS</strong></span>
+			</a>
+			<a class="header-link" href="#tracking"
+				>Track Shipment <span aria-hidden="true">&#8599;</span></a
+			>
+		</header>
+
+		<main id="top">
+			<section class="hero" id="tracking" aria-labelledby="hero-title">
+				<div class="hero-inner">
+					<div class="hero-copy">
+						<p class="eyebrow">
+							<span class="eyebrow-dot" aria-hidden="true"></span> A LITTLE CLARITY ON THE WAY
+						</p>
+						<h1 id="hero-title">Track your<br /><span>shipment.</span></h1>
+						<p class="hero-description">
+							Enter the ID on your receipt. We’ll show you the latest update available.
+						</p>
+						<p class="hero-note">
+							<span aria-hidden="true">&#10003;</span> No account, no extra steps
+						</p>
+					</div>
+
+					<form class="tracking-form" id="tracking-form" novalidate>
+						<label for="tracking-id">Tracking ID</label>
+						<div class="tracking-input-wrap">
+							<input
+								id="tracking-id"
+								name="tracking_id"
+								type="text"
+								autocomplete="off"
+								autocapitalize="characters"
+								spellcheck="false"
+								placeholder="Enter your tracking ID"
+								required
+								aria-describedby="tracking-hint tracking-error"
+							/>
+							<span class="input-symbol" aria-hidden="true">&#8594;</span>
+						</div>
+						<p class="field-hint" id="tracking-hint">Find this ID on your shipment receipt.</p>
+						<button class="button button-primary track-button" type="submit">
+							<span>Track shipment</span><span aria-hidden="true">&#8594;</span>
+						</button>
+						<p class="form-error" id="tracking-error" role="alert" hidden></p>
+					</form>
+					<div class="hero-index" aria-hidden="true">
+						<span>01</span><span class="index-line"></span><span>DELIVERY, MADE CLEAR</span>
+					</div>
+				</div>
+			</section>
+
+			<section class="tracking-result-section" aria-label="Shipment tracking result">
+				<div class="content-width">
+					<p class="loading-message" id="tracking-loading" role="status" aria-live="polite" hidden>
+						<span class="loading-spinner" aria-hidden="true"></span> Checking your shipment...
+					</p>
+					<div
+						class="result-region"
+						id="tracking-result"
+						aria-live="polite"
+						aria-atomic="true"
+						hidden
+					></div>
+				</div>
+			</section>
+
+			<section class="destination-section" aria-labelledby="destination-title">
+				<div class="destination-inner section-shell">
+					<div class="destination-copy">
+						<p class="eyebrow">THINKING OF SENDING ABROAD?</p>
+						<h2 id="destination-title">Have a destination in mind?</h2>
+						<p>
+							Ask us about current availability for these routes. Service can vary by parcel and
+							destination.
+						</p>
+					</div>
+					<div class="destination-window">
+						<div class="destination-track">
+							<ul class="destination-run" aria-label="Destinations to ask about">
+								<li>
+									<span class="destination-flag" role="img" aria-label="United States flag"
+										>🇺🇸</span
+									>
+								</li>
+								<li>
+									<span class="destination-flag" role="img" aria-label="Australia flag">🇦🇺</span>
+								</li>
+								<li>
+									<span class="destination-flag" role="img" aria-label="Canada flag">🇨🇦</span>
+								</li>
+								<li>
+									<span class="destination-flag" role="img" aria-label="United Kingdom flag"
+										>🇬🇧</span
+									>
+								</li>
+								<li>
+									<span class="destination-flag" role="img" aria-label="New Zealand flag">🇳🇿</span>
+								</li>
+								<li>
+									<span class="destination-flag" role="img" aria-label="Germany flag">🇩🇪</span>
+								</li>
+							</ul>
+							<ul class="destination-run" aria-hidden="true">
+								<li><span class="destination-flag">🇺🇸</span></li>
+								<li><span class="destination-flag">🇦🇺</span></li>
+								<li><span class="destination-flag">🇨🇦</span></li>
+								<li><span class="destination-flag">🇬🇧</span></li>
+								<li><span class="destination-flag">🇳🇿</span></li>
+								<li><span class="destination-flag">🇩🇪</span></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="benefits section-shell" aria-labelledby="benefits-title">
+				<div class="section-heading">
+					<p class="eyebrow">NO GUESSWORK</p>
+					<h2 id="benefits-title">One tracking ID.<br />The latest update.</h2>
+				</div>
+				<div class="benefit-list">
+					<article class="benefit-item">
+						<span class="benefit-number">01</span>
+						<h3>Easy to check</h3>
+						<p>Your receipt has the ID. Start there whenever you need an update.</p>
+					</article>
+					<article class="benefit-item">
+						<span class="benefit-number">02</span>
+						<h3>Latest available update</h3>
+						<p>See the most recent shipment status we have on record.</p>
+					</article>
+					<article class="benefit-item">
+						<span class="benefit-number">03</span>
+						<h3>A person to ask</h3>
+						<p>Need a hand? Get in touch with the team about your parcel.</p>
+					</article>
+				</div>
+			</section>
+
+			<section class="about-section" aria-labelledby="about-title">
+				<div class="about-inner section-shell">
+					<p class="eyebrow">ABOUT US</p>
+					<div>
+						<h2 id="about-title">We keep shipment updates simple.</h2>
+						<p>
+							Shree Balaji Couriers provides courier and parcel delivery services with a simple
+							focus: making shipment handling and tracking easy for our customers. Use your tracking
+							ID above to check the latest available status of your shipment.
+						</p>
+					</div>
+					<span class="about-mark" aria-hidden="true">SB<span>.</span></span>
+				</div>
+			</section>
+
+			<section class="contact-section section-shell" id="contact" aria-labelledby="contact-title">
+				<div class="contact-intro">
+					<p class="eyebrow">NEED A HAND?</p>
+					<h2 id="contact-title">Need help with<br />your shipment?</h2>
+					<p>
+						Have a question about your parcel? Contact details will be added here once provided by
+						the business.
+					</p>
+				</div>
+				<dl class="contact-details">
+					<div>
+						<dt>Phone</dt>
+						<dd>Phone number to be provided</dd>
+					</div>
+					<div>
+						<dt>Email</dt>
+						<dd>Email address to be provided</dd>
+					</div>
+					<div>
+						<dt>Address</dt>
+						<dd>Business address to be provided</dd>
+					</div>
+				</dl>
+			</section>
+		</main>
+
+		<footer class="site-footer">
+			<a class="wordmark footer-wordmark" href="#top">
+				<span class="wordmark-mark" aria-hidden="true">SB</span>
+				<span class="wordmark-copy"><span class="wordmark-name">Shree Balaji</span><strong>COURIERS</strong></span>
+			</a>
+			<p>Track your shipment with ease.</p>
+			<nav class="footer-navigation" aria-label="Footer navigation">
+				<a href="#tracking">Track shipment</a>
+				<a href="#about-title">About us</a>
+				<a href="#contact">Contact</a>
+				<a class="footer-admin-link" href="admin.html"
+					>Admin login <span aria-hidden="true">&#8599;</span></a
+				>
+			</nav>
+			<small
+				>&copy; <span id="copyright-year">2026</span> Shree Balaji Couriers. All rights
+				reserved.</small
+			>
+		</footer>
+	</body>
+</html>
