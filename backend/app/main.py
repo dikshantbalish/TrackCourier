@@ -32,8 +32,8 @@ app.add_middleware(
     secret_key=settings.session_secret.get_secret_value(),
     session_cookie="sbc_admin_session",
     max_age=settings.session_max_age_seconds,
-    same_site="lax",
-    https_only=settings.session_cookie_secure,
+    same_site="none",
+    https_only=True,
 )
 app.add_middleware(
     CORSMiddleware,
