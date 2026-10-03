@@ -2,7 +2,7 @@
 	"use strict";
 
 	const settings = {
-		baseUrl: "",
+		baseUrl: "https://trackcourier-6hcj.onrender.com",
 		paths: {
 			tracking: "/api/tracking/{trackingId}",
 			login: "/api/auth/login",
