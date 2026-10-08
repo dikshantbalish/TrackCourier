@@ -311,4 +311,19 @@
 			event.currentTarget.disabled = false;
 		}
 	});
+
+	async function restoreSession() {
+		try {
+			await window.CourierApi.currentAdmin();
+			loginPanel.hidden = true;
+			managerPanel.hidden = false;
+			await refreshRecords();
+		} catch (error) {
+			if (error.kind !== "unauthorized") {
+				showMessage(loginMessage, friendlyError(error, "Unable to restore your session."));
+			}
+		}
+	}
+
+	void restoreSession();
 })();

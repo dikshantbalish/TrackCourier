@@ -2,10 +2,15 @@
 	"use strict";
 
 	const settings = {
-		baseUrl: "https://trackcourier-6hcj.onrender.com",
+		baseUrl:
+			window.location.origin === "null" ||
+			window.location.protocol === "file:"
+				? "https://trackcourier-6hcj.onrender.com"
+				: window.location.origin,
 		paths: {
 			tracking: "/api/tracking/{trackingId}",
 			login: "/api/auth/login",
+			currentAdmin: "/api/auth/me",
 			logout: "/api/auth/logout",
 			shipments: "/api/admin/shipments",
 			shipment: "/api/admin/shipments/{id}",
@@ -158,6 +163,10 @@
 		});
 	}
 
+	async function currentAdmin() {
+		return request(settings.paths.currentAdmin);
+	}
+
 	async function logout() {
 		return request(settings.paths.logout, { method: "POST" });
 	}
@@ -193,6 +202,7 @@
 		warmBackend,
 		trackShipment,
 		login,
+		currentAdmin,
 		logout,
 		listShipments,
 		saveShipment,
