@@ -64,8 +64,8 @@ input:focus-visible {
 	position: relative;
 	isolation: isolate;
 	width: 100%;
-	min-height: 76px;
-	padding: 0 clamp(20px, 6.3vw, 96px);
+	min-height: 88px;
+	padding: 12px clamp(20px, 6.3vw, 96px);
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -76,67 +76,83 @@ input:focus-visible {
 .wordmark {
 	display: inline-flex;
 	align-items: center;
-	gap: 11px;
+	gap: 14px;
 	text-decoration: none;
 }
 .wordmark-copy {
 	display: grid;
-	gap: 3px;
+	gap: 4px;
 	line-height: 1;
 }
 .wordmark-mark {
 	position: relative;
 	display: grid;
 	place-items: center;
-	width: 36px;
-	height: 34px;
-	border: 1px solid var(--green);
-	border-radius: 2px;
+	width: 58px;
+	height: 58px;
+	border: 0;
+	border-radius: 0;
 	color: var(--green);
 	font-size: 11px;
 	font-weight: 800;
 	letter-spacing: 0.02em;
 }
-.wordmark-mark::after {
+.logo-slot {
+	position: relative;
+	overflow: hidden;
+	padding: 0;
+}
+.logo-fallback {
 	position: absolute;
-	right: 3px;
-	bottom: 3px;
-	left: 3px;
-	height: 2px;
-	background: var(--saffron);
-	content: "";
+	inset: 0;
+	display: grid;
+	place-items: center;
+	font-size: 11px;
+	font-weight: 800;
+}
+.logo-fallback[hidden] {
+	display: none;
+}
+.logo-slot img {
+	position: relative;
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
 }
 .site-header .wordmark {
 	color: #fff;
 }
 .site-header .wordmark-name {
-	font-size: 21px;
-	font-weight: 850;
+	font-size: clamp(18px, 2vw, 22px);
+	font-weight: 800;
+	letter-spacing: -0.025em;
 }
 .site-header .wordmark-copy strong {
-	color: var(--saffron-light);
-	font-size: 9px;
-	font-weight: 850;
-	letter-spacing: 0.17em;
+	color: var(--green);
+	font-size: 10px;
+	font-weight: 800;
+	letter-spacing: 0.2em;
 }
 .site-header .wordmark-mark {
-	width: 38px;
-	border-color: rgb(255 255 255 / 72%);
-	background: rgb(255 255 255 / 8%);
-	color: #fff;
+	width: 58px;
+	border: 1px solid var(--line);
+	border-radius: 8px;
+	background: #ffffff;
+	color: var(--green);
 }
 .header-link {
 	display: inline-flex;
 	align-items: center;
 	gap: 10px;
-	min-height: 44px;
-	padding: 0 12px;
-	border: 1px solid rgb(255 255 255 / 42%);
-	border-radius: 3px;
+	min-height: 46px;
+	padding: 0 16px;
+	border: 1px solid var(--green);
+	border-radius: 7px;
 	text-decoration: none;
 	color: #fff;
 	font-size: 13px;
-	font-weight: 700;
+	font-weight: 750;
 	transition:
 		background-color 0.2s ease,
 		border-color 0.2s ease;
@@ -159,14 +175,7 @@ input:focus-visible {
 	color: #fff;
 }
 .hero::after {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 5px;
-	height: 100%;
-	background: var(--saffron);
-	content: "";
-	pointer-events: none;
+	display: none;
 }
 .hero::before {
 	position: absolute;
@@ -591,6 +600,22 @@ p {
 }
 .state-message[data-state="error"] {
 	border-left-color: var(--warning);
+}
+
+.state-message[data-state="warming"] {
+	border-left-color: #d49b2c;
+}
+
+.state-message[data-state="warming"]::before {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	margin-bottom: 12px;
+	border: 2px solid var(--line);
+	border-top-color: #d49b2c;
+	border-radius: 50%;
+	content: "";
+	animation: spin 0.8s linear infinite;
 }
 .state-message h2 {
 	margin: 0 0 8px;
@@ -1044,5 +1069,565 @@ p {
 		width: 100%;
 		height: 48px;
 		border-radius: 3px;
+	}
+}
+
+/* Core brand direction: clear, practical and built for a logistics business. */
+:root {
+	--ink: #14253d;
+	--ink-soft: #516174;
+	--muted: #6c7b8d;
+	--paper: #f5f8fb;
+	--paper-warm: #f5f8fb;
+	--paper-sage: #eef4f8;
+	--surface: #ffffff;
+	--line: #d8e1ea;
+	--green: #0b5c8e;
+	--green-dark: #073b60;
+	--lime: #e8f0f6;
+	--saffron: #ed6c35;
+	--saffron-light: #ff9a62;
+	--success: #16734b;
+	--warning: #b84a38;
+	--info: #0b5c8e;
+	--shadow: 0 18px 45px rgb(20 37 61 / 10%);
+	font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+html {
+	background: var(--paper);
+}
+
+body {
+	color: var(--ink);
+	background: var(--paper);
+}
+
+.site-header {
+	min-height: 82px;
+	background: #ffffff;
+	color: var(--ink);
+	border-bottom: 1px solid var(--line);
+}
+
+.site-header .wordmark {
+	color: var(--ink);
+}
+
+.site-header .wordmark-name {
+	font-size: 20px;
+	font-weight: 800;
+	letter-spacing: -0.02em;
+}
+
+.site-header .wordmark-copy strong {
+	color: var(--green);
+}
+
+.site-header .wordmark-mark {
+	border-color: var(--green);
+	background: var(--lime);
+	color: var(--green);
+}
+
+.header-link {
+	border-color: var(--green);
+	color: var(--green);
+}
+
+.header-link:hover {
+	border-color: var(--green-dark);
+	background: var(--lime);
+}
+
+.header-navigation {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.header-navigation > a:not(.header-link) {
+	position: relative;
+	display: inline-flex;
+	min-height: 40px;
+	align-items: center;
+	padding: 0 12px;
+	border-radius: 6px;
+	color: var(--ink-soft);
+	font-size: 13px;
+	font-weight: 650;
+	text-decoration: none;
+	transition:
+		color 0.18s ease,
+		background-color 0.18s ease;
+}
+
+.header-navigation > a:not(.header-link)::after {
+	position: absolute;
+	right: 12px;
+	bottom: 5px;
+	left: 12px;
+	height: 2px;
+	border-radius: 2px;
+	background: var(--saffron);
+	content: "";
+	transform: scaleX(0);
+	transform-origin: center;
+	transition: transform 0.18s ease;
+}
+
+.header-navigation > a:not(.header-link):hover {
+	color: var(--green);
+	background: var(--lime);
+}
+
+.header-navigation > a:not(.header-link):hover::after,
+.header-navigation > a:not(.header-link):focus-visible::after {
+	transform: scaleX(1);
+}
+
+.service-status {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	margin-left: 8px;
+	color: var(--muted);
+	font-size: 11px;
+	font-weight: 650;
+	white-space: nowrap;
+}
+
+.service-status-dot {
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: #d49b2c;
+	box-shadow: 0 0 0 4px rgb(212 155 44 / 12%);
+	animation: status-pulse 1.8s ease-in-out infinite;
+}
+
+.service-status[data-state="ready"] {
+	color: var(--success);
+}
+
+.service-status[data-state="ready"] .service-status-dot {
+	background: var(--success);
+	box-shadow: 0 0 0 4px rgb(22 115 75 / 12%);
+	animation: none;
+}
+
+.service-status[data-state="waking"] {
+	color: var(--warning);
+}
+
+@keyframes status-pulse {
+	50% {
+		opacity: 0.45;
+		transform: scale(0.8);
+	}
+}
+
+.hero {
+	background:
+		linear-gradient(120deg, #073b60 0%, #0b5c8e 66%, #1975a7 100%);
+}
+
+.hero::after {
+	display: none;
+}
+
+.hero::before {
+	width: 100%;
+	height: 100%;
+	background: radial-gradient(circle at 85% 15%, rgb(255 255 255 / 13%), transparent 34%);
+	opacity: 1;
+}
+
+.hero-inner {
+	min-height: 520px;
+	padding-top: 76px;
+	padding-bottom: 76px;
+}
+
+.hero-copy {
+	max-width: 560px;
+	animation: content-arrive 0.65s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.hero .eyebrow {
+	color: #d5e8f5;
+}
+
+.eyebrow-dot {
+	background: var(--saffron);
+}
+
+.hero h1 {
+	margin-top: 26px;
+	font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+	font-size: clamp(48px, 8vw, 86px);
+	line-height: 0.98;
+	font-weight: 800;
+	letter-spacing: -0.055em;
+}
+
+.hero h1 span {
+	color: #ffffff;
+}
+
+.hero-description {
+	max-width: 450px;
+	color: #e3eff7;
+	font-size: 17px;
+	line-height: 1.65;
+}
+
+.hero-note {
+	color: #d5e8f5;
+}
+
+.tracking-form {
+	border: 0;
+	border-radius: 12px;
+	background: #ffffff;
+	box-shadow: 0 22px 55px rgb(2 28 48 / 24%);
+	animation: content-arrive 0.7s 0.1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.tracking-input-wrap input {
+	border-radius: 7px;
+	background: #f7fafc;
+}
+
+.tracking-input-wrap input:focus {
+	border-color: var(--green);
+	outline-color: rgb(11 92 142 / 16%);
+}
+
+.button {
+	border-radius: 7px;
+	transition:
+		color 0.18s ease,
+		background-color 0.18s ease,
+		border-color 0.18s ease,
+		transform 0.18s ease;
+}
+
+.footer-navigation .footer-admin-link:hover {
+	transform: translateY(-1px);
+}
+
+.button-primary {
+	background: var(--saffron);
+}
+
+.button-primary:hover:not(:disabled) {
+	background: #d95725;
+}
+
+.result-card,
+.state-message {
+	border-radius: 12px;
+	box-shadow: var(--shadow);
+}
+
+.destination-section {
+	border-bottom-color: var(--line);
+	background: #eaf3f9;
+}
+
+.destination-copy .eyebrow {
+	color: var(--green);
+}
+
+.destination-window::before {
+	border-top-color: #9fb9ca;
+}
+
+.destination-run li {
+	border-color: #c7d9e5;
+	background: #ffffff;
+}
+
+.benefits,
+.contact-section {
+	background: var(--paper);
+}
+
+.section-heading h2,
+.contact-intro h2,
+.destination-copy h2,
+.about-inner h2,
+.timeline-title,
+.state-message h2 {
+	font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+	font-weight: 750;
+	letter-spacing: -0.035em;
+}
+
+.benefit-item {
+	border-color: var(--line);
+}
+
+.benefit-number,
+.contact-details dt,
+.meta-item dt,
+.result-kicker {
+	color: var(--green);
+}
+
+.about-section {
+	background: #ffffff;
+	border-top: 1px solid var(--line);
+	border-bottom: 1px solid var(--line);
+}
+
+.about-mark {
+	color: rgb(11 92 142 / 7%);
+	font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+	font-weight: 800;
+}
+
+.about-mark span {
+	color: var(--saffron);
+}
+
+.about-inner > div > p + p {
+	margin-top: 14px;
+}
+
+.about-inner h2 {
+	max-width: 620px;
+	font-size: clamp(30px, 5vw, 46px);
+	line-height: 1.08;
+}
+
+.about-inner > div > p {
+	max-width: 650px;
+	font-size: 15px;
+	line-height: 1.75;
+}
+
+.about-inner > div > p strong {
+	color: var(--ink);
+	font-weight: 750;
+}
+
+.site-footer {
+	background: #073b60;
+	color: #ffffff;
+	border-top: 0;
+}
+
+.site-footer > p,
+.site-footer small,
+.footer-navigation a {
+	color: #c7dbea;
+}
+
+.footer-wordmark .wordmark-mark {
+	border-color: #9fc1d8;
+	color: #ffffff;
+}
+
+.footer-wordmark .wordmark-name {
+	color: #ffffff;
+}
+
+.footer-wordmark .wordmark-copy strong {
+	color: var(--saffron-light);
+}
+
+.footer-navigation .footer-admin-link {
+	border-color: #5f87a4;
+	color: #ffffff;
+}
+
+.header-link {
+	box-shadow: 0 5px 14px rgb(11 92 142 / 12%);
+}
+
+@media (min-width: 680px) {
+	.hero-inner {
+		min-height: 570px;
+	}
+}
+
+/* Shared brand alignment for the public shell. */
+.site-header {
+	position: sticky;
+	top: 0;
+	z-index: 20;
+	min-height: 88px;
+	padding: 12px clamp(20px, 6.3vw, 96px);
+	box-shadow: 0 4px 18px rgb(20 37 61 / 6%);
+	transition: box-shadow 0.2s ease;
+}
+
+.site-header .wordmark:hover .logo-slot img {
+	transform: scale(1.04);
+}
+
+.logo-slot img {
+	transition: transform 0.25s ease;
+}
+
+.site-header .wordmark-mark,
+.footer-wordmark .wordmark-mark {
+	width: 58px;
+	height: 58px;
+	padding: 0;
+	border: 1px solid var(--line);
+	border-radius: 8px;
+	background: #ffffff;
+}
+
+.site-header .wordmark-name {
+	font-size: clamp(18px, 2vw, 22px);
+	letter-spacing: -0.025em;
+}
+
+.site-header .wordmark-copy strong {
+	color: var(--green);
+	font-size: 10px;
+	letter-spacing: 0.2em;
+}
+
+.header-link {
+	min-height: 46px;
+	padding: 0 16px;
+	border: 1px solid var(--green);
+	border-radius: 7px;
+	font-weight: 750;
+}
+
+.site-footer {
+	row-gap: 18px;
+	padding-top: 32px;
+	padding-bottom: 32px;
+}
+
+.footer-wordmark {
+	gap: 14px;
+}
+
+.footer-wordmark .wordmark-copy {
+	gap: 4px;
+}
+
+.footer-wordmark .wordmark-name {
+	font-size: 20px;
+	font-weight: 800;
+	letter-spacing: -0.025em;
+}
+
+.footer-wordmark .wordmark-copy strong {
+	font-size: 10px;
+	letter-spacing: 0.2em;
+}
+
+.footer-navigation {
+	gap: 8px 24px;
+}
+
+.footer-navigation a {
+	min-height: 38px;
+}
+
+.footer-navigation .footer-admin-link {
+	min-height: 40px;
+	margin-left: 0;
+	padding: 0;
+	border: 0;
+	border-radius: 0;
+	color: #c7dbea;
+	font-weight: 650;
+}
+
+.footer-navigation .footer-admin-link:hover {
+	border-color: transparent;
+	background: transparent;
+	color: #ffffff;
+	transform: none;
+}
+
+@media (max-width: 679px) {
+	.site-header {
+		min-height: 76px;
+		padding: 10px 18px;
+	}
+
+	.site-header .wordmark-mark,
+	.footer-wordmark .wordmark-mark {
+		width: 50px;
+		height: 50px;
+	}
+
+	.wordmark {
+		gap: 10px;
+	}
+
+	.site-header .wordmark-name {
+		font-size: 17px;
+	}
+
+	.site-header .wordmark-copy strong {
+		font-size: 8px;
+	}
+
+	.header-link {
+		min-height: 42px;
+		padding: 0 11px;
+		font-size: 12px;
+	}
+
+	.header-navigation {
+		gap: 0;
+	}
+
+	.header-navigation > a:not(.header-link) {
+		display: inline-flex;
+		min-height: 36px;
+		padding: 0 5px;
+		font-size: 10px;
+		white-space: nowrap;
+	}
+
+	.header-navigation > a:not(.header-link)::after {
+		right: 5px;
+		bottom: 3px;
+		left: 5px;
+	}
+
+	.service-status {
+		margin-left: 5px;
+		font-size: 0;
+	}
+
+	.service-status-dot {
+		width: 6px;
+		height: 6px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.site-header .wordmark:hover .logo-slot img,
+	.footer-navigation .footer-admin-link:hover {
+		transform: none;
+	}
+
+	.hero-copy,
+	.tracking-form,
+	.result-card,
+	.state-message {
+		animation: none;
+	}
+
+	.service-status-dot {
+		animation: none;
+	}
+
+	.state-message[data-state="warming"]::before {
+		animation: none;
 	}
 }

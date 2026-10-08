@@ -1,3 +1,5 @@
+import time
+
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
@@ -7,6 +9,9 @@ from app.schemas.auth import AdminLoginRequest, AdminLoginResponse, AdminRespons
 from app.services.authentication import authenticate_admin
 
 router = APIRouter(prefix="/api/auth", tags=["admin authentication"])
+_LOGIN_WINDOW_SECONDS = 60
+_LOGIN_MAX_FAILURES = 5
+_login_failures: dict[str, list[float]] = {}
 
 
 def require_admin(request: Request, database: Session = Depends(get_db)) -> AdminUser:
@@ -29,13 +34,31 @@ def require_admin(request: Request, database: Session = Depends(get_db)) -> Admi
 def login(
     credentials: AdminLoginRequest, request: Request, database: Session = Depends(get_db)
 ) -> AdminLoginResponse:
+    client_host = request.client.host if request.client else "unknown"
+    now = time.monotonic()
+    recent_failures = [
+        timestamp
+        for timestamp in _login_failures.get(client_host, [])
+        if now - timestamp < _LOGIN_WINDOW_SECONDS
+    ]
+    if len(recent_failures) >= _LOGIN_MAX_FAILURES:
+        retry_after = max(1, int(_LOGIN_WINDOW_SECONDS - (now - recent_failures[0])))
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Too many login attempts. Please try again later.",
+            headers={"Retry-After": str(retry_after)},
+        )
+
     admin = authenticate_admin(database, credentials.username, credentials.password)
     if admin is None:
+        recent_failures.append(now)
+        _login_failures[client_host] = recent_failures
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid username or password",
         )
 
+    _login_failures.pop(client_host, None)
     request.session.clear()
     request.session["admin_id"] = admin.id
     request.session["session_version"] = admin.session_version

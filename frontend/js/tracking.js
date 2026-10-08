@@ -1,13 +1,54 @@
 (() => {
 	"use strict";
 
+	const navigationEntry = performance.getEntriesByType("navigation")[0];
+	const isReload = navigationEntry?.type === "reload";
+	if (isReload && window.location.hash) {
+		history.scrollRestoration = "manual";
+		const resetToTop = () => {
+			history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
+			window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+		};
+		resetToTop();
+		window.addEventListener("load", resetToTop, { once: true });
+		window.addEventListener("pageshow", resetToTop, { once: true });
+		setTimeout(resetToTop, 0);
+	}
+
 	const form = document.querySelector("#tracking-form");
+	const serviceStatus = document.querySelector("#service-status");
+	const serviceStatusLabel = serviceStatus?.querySelector(".service-status-label");
 	const input = document.querySelector("#tracking-id");
 	const submitButton = form.querySelector("[type='submit']");
 	const errorMessage = document.querySelector("#tracking-error");
 	const loadingMessage = document.querySelector("#tracking-loading");
+	const loadingLabel = document.querySelector("#tracking-loading-label");
 	const resultRegion = document.querySelector("#tracking-result");
 	let isLoading = false;
+
+	async function warmHostedBackend() {
+		const maxAttempts = 12;
+		for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+			try {
+				const backendState = await window.CourierApi.warmBackend();
+				if (serviceStatus && serviceStatusLabel) {
+					serviceStatus.dataset.state = "ready";
+					serviceStatusLabel.textContent =
+						backendState === "ready" ? "Service ready" : "Service contacted";
+				}
+				return;
+			} catch {
+				if (serviceStatus && serviceStatusLabel) {
+					serviceStatus.dataset.state = "waking";
+					serviceStatusLabel.textContent =
+						attempt === maxAttempts ? "Service may be waking up" : "Connecting service";
+				}
+				if (attempt < maxAttempts) {
+					await new Promise((resolve) => window.setTimeout(resolve, 5000));
+				}
+			}
+		}
+	}
 
 	const statusCopy = {
 		booked: ["Booked", "neutral", "Your shipment has been booked."],
@@ -58,9 +99,34 @@
 		};
 	}
 
-	function showError(title, message, kind = "error") {
-		resultRegion.innerHTML = `<article class="state-message" data-state="${kind}" aria-labelledby="result-state-title"><h2 id="result-state-title">${escapeHtml(title)}</h2><p>${escapeHtml(message)}</p><button class="retry-button" type="button" data-action="retry">Try again</button></article>`;
+	function showError(title, message, kind = "error", includeRetry = true) {
+		const retryButton = includeRetry
+			? `<button class="retry-button" type="button" data-action="retry">Check again</button>`
+			: "";
+		resultRegion.innerHTML = `<article class="state-message" data-state="${kind}" aria-labelledby="result-state-title"><h2 id="result-state-title">${escapeHtml(title)}</h2><p>${escapeHtml(message)}</p>${retryButton}</article>`;
 		resultRegion.hidden = false;
+	}
+
+	function setLoadingLabel(message) {
+		if (loadingLabel) loadingLabel.textContent = message;
+	}
+
+	async function trackWithWarmupRetry(trackingId) {
+		const maxAttempts = 8;
+		for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+			try {
+				return await window.CourierApi.trackShipment(trackingId);
+			} catch (error) {
+				if (!["network", "server"].includes(error.kind) || attempt === maxAttempts) throw error;
+				setLoadingLabel(
+					attempt < 3
+						? "Connecting to the shipment service..."
+						: "The service is waking up. Checking again...",
+				);
+				await new Promise((resolve) => window.setTimeout(resolve, 4000));
+			}
+		}
+		throw new Error("Tracking retry limit reached");
 	}
 
 	function renderTimeline(history, currentStatus) {
@@ -121,11 +187,12 @@
 		submitButton.disabled = true;
 		submitButton.querySelector("span:first-child").textContent = "Checking shipment";
 		loadingMessage.hidden = false;
+		setLoadingLabel("Checking your shipment...");
 		resultRegion.hidden = true;
 		resultRegion.replaceChildren();
 
 		try {
-			const shipment = await window.CourierApi.trackShipment(trackingId);
+			const shipment = await trackWithWarmupRetry(trackingId);
 			renderShipment(shipment, trackingId);
 		} catch (error) {
 			if (error.kind === "not-found") {
@@ -137,17 +204,24 @@
 			} else if (error.kind === "validation") {
 				showError("Check your tracking ID", "Please check the ID and try again.");
 			} else {
-				showError("Unable to check your shipment right now", "Please try again in a moment.");
+				showError(
+					"Shipment service is still connecting",
+					"We're keeping the connection open. Please check again in a little while.",
+					"warming",
+					false,
+				);
 			}
 		} finally {
 			isLoading = false;
 			submitButton.disabled = false;
 			submitButton.querySelector("span:first-child").textContent = "Track shipment";
 			loadingMessage.hidden = true;
+			setLoadingLabel("Checking your shipment...");
 		}
 	}
 
 	form.addEventListener("submit", submitTracking);
+	warmHostedBackend();
 	resultRegion.addEventListener("click", (event) => {
 		if (event.target.closest("[data-action='retry']")) {
 			input.focus();

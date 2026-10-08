@@ -116,6 +116,40 @@
 		return normalizeShipment(await request(path));
 	}
 
+	async function warmBackend() {
+		const healthUrl = endpoint(`/health?warmup=${Date.now()}`);
+		const isCrossOrigin = new URL(healthUrl, window.location.href).origin !== window.location.origin;
+		if (isCrossOrigin) {
+			void fetch(healthUrl, {
+				method: "GET",
+				cache: "no-store",
+				mode: "no-cors",
+				keepalive: true,
+			}).catch(() => {});
+			return "contacted";
+		}
+
+		const controller = new AbortController();
+		const timeout = window.setTimeout(() => controller.abort(), 15_000);
+		try {
+			const response = await fetch(healthUrl, {
+				method: "GET",
+				cache: "no-store",
+				mode: "same-origin",
+				signal: controller.signal,
+				headers: { Accept: "application/json" },
+			});
+			if (!response.ok && response.type !== "opaque")
+				throw new ApiError("server", "The service is not ready yet.");
+			return "ready";
+		} catch (error) {
+			if (error instanceof ApiError) throw error;
+			throw new ApiError("network", "The service is waking up.");
+		} finally {
+			window.clearTimeout(timeout);
+		}
+	}
+
 	async function login(credentials) {
 		return request(settings.paths.login, {
 			method: "POST",
@@ -156,6 +190,7 @@
 
 	window.CourierApi = Object.freeze({
 		ApiError,
+		warmBackend,
 		trackShipment,
 		login,
 		logout,

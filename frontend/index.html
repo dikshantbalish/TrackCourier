@@ -15,19 +15,24 @@
 		<meta property="og:type" content="website" />
 		<meta name="theme-color" content="#f7f4ec" />
 		<title>Shree Balaji Couriers | Track Your Shipment</title>
-		<link rel="stylesheet" href="css/style.css" />
-		<script src="js/api.js" defer></script>
-		<script src="js/tracking.js" defer></script>
+		<link rel="stylesheet" href="css/style.css?v=20261008-3" />
+		<script src="js/api.js?v=20261008-4" defer></script>
+		<script src="js/tracking.js?v=20261008-6" defer></script>
 	</head>
 	<body>
 		<header class="site-header">
 			<a class="wordmark" href="#top" aria-label="Shree Balaji Couriers home">
-				<span class="wordmark-mark" aria-hidden="true">SB</span>
+				<span class="wordmark-mark logo-slot">
+					<span class="logo-fallback" aria-hidden="true">SB</span>
+					<img src="assets/logo.png" alt="" onload="this.previousElementSibling.hidden = true" onerror="this.hidden = true" />
+				</span>
 				<span class="wordmark-copy"><span class="wordmark-name">Shree Balaji</span><strong>COURIERS</strong></span>
 			</a>
-			<a class="header-link" href="#tracking"
-				>Track Shipment <span aria-hidden="true">&#8599;</span></a
-			>
+			<nav class="header-navigation" aria-label="Main navigation">
+				<a href="#tracking">Track shipment</a>
+				<a href="#about-title">About us</a>
+				<a href="#contact">Contact</a>
+			</nav>
 		</header>
 
 		<main id="top">
@@ -37,12 +42,9 @@
 						<p class="eyebrow">
 							<span class="eyebrow-dot" aria-hidden="true"></span> A LITTLE CLARITY ON THE WAY
 						</p>
-						<h1 id="hero-title">Track your<br /><span>shipment.</span></h1>
+						<h1 id="hero-title">Shree Balaji<br /><span>Couriers</span></h1>
 						<p class="hero-description">
-							Enter the ID on your receipt. We’ll show you the latest update available.
-						</p>
-						<p class="hero-note">
-							<span aria-hidden="true">&#10003;</span> No account, no extra steps
+							Reliable delivery. Clear tracking. Enter your shipment ID to see the latest update.
 						</p>
 					</div>
 
@@ -68,16 +70,14 @@
 						</button>
 						<p class="form-error" id="tracking-error" role="alert" hidden></p>
 					</form>
-					<div class="hero-index" aria-hidden="true">
-						<span>01</span><span class="index-line"></span><span>DELIVERY, MADE CLEAR</span>
-					</div>
 				</div>
 			</section>
 
 			<section class="tracking-result-section" aria-label="Shipment tracking result">
 				<div class="content-width">
 					<p class="loading-message" id="tracking-loading" role="status" aria-live="polite" hidden>
-						<span class="loading-spinner" aria-hidden="true"></span> Checking your shipment...
+						<span class="loading-spinner" aria-hidden="true"></span>
+						<span id="tracking-loading-label">Checking your shipment...</span>
 					</p>
 					<div
 						class="result-region"
@@ -166,11 +166,12 @@
 				<div class="about-inner section-shell">
 					<p class="eyebrow">ABOUT US</p>
 					<div>
-						<h2 id="about-title">We keep shipment updates simple.</h2>
+						<h2 id="about-title">Reliable delivery, wherever you need to go.</h2>
 						<p>
-							Shree Balaji Couriers provides courier and parcel delivery services with a simple
-							focus: making shipment handling and tracking easy for our customers. Use your tracking
-							ID above to check the latest available status of your shipment.
+							<strong>Shree Balaji Couriers</strong> provides dependable domestic and international
+							courier services for documents, parcels, and business shipments. With careful handling,
+							clear communication, and trusted global delivery networks including DHL and FedEx, we
+							connect India to destinations worldwide.
 						</p>
 					</div>
 					<span class="about-mark" aria-hidden="true">SB<span>.</span></span>
@@ -181,23 +182,20 @@
 				<div class="contact-intro">
 					<p class="eyebrow">NEED A HAND?</p>
 					<h2 id="contact-title">Need help with<br />your shipment?</h2>
-					<p>
-						Have a question about your parcel? Contact details will be added here once provided by
-						the business.
-					</p>
+					<p>Have a question about your parcel? Contact our team for shipment support.</p>
 				</div>
 				<dl class="contact-details">
 					<div>
 						<dt>Phone</dt>
-						<dd>Phone number to be provided</dd>
+						<dd> +91 7988574559 </dd>
 					</div>
 					<div>
 						<dt>Email</dt>
-						<dd>Email address to be provided</dd>
+						<dd> support@shreebalajicouriers.com </dd>
 					</div>
 					<div>
 						<dt>Address</dt>
-						<dd>Business address to be provided</dd>
+						<dd>Shree Balaji Couriers near Muthoot Finance, 47MV+GR7, Yamuna Nagar, Haryana, India</dd>
 					</div>
 				</dl>
 			</section>
@@ -205,7 +203,10 @@
 
 		<footer class="site-footer">
 			<a class="wordmark footer-wordmark" href="#top">
-				<span class="wordmark-mark" aria-hidden="true">SB</span>
+				<span class="wordmark-mark logo-slot">
+					<span class="logo-fallback" aria-hidden="true">SB</span>
+					<img src="assets/logo.png" alt="" onload="this.previousElementSibling.hidden = true" onerror="this.hidden = true" />
+				</span>
 				<span class="wordmark-copy"><span class="wordmark-name">Shree Balaji</span><strong>COURIERS</strong></span>
 			</a>
 			<p>Track your shipment with ease.</p>

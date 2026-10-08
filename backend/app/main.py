@@ -1,15 +1,18 @@
 from contextlib import asynccontextmanager
 import logging
 
-from fastapi import FastAPI, Request
+from fastapi import Depends, FastAPI, HTTPException, Request, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
+from sqlalchemy import text
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import Session
 
 from app.config import BACKEND_ROOT, settings
-from app.database.connection import Base, engine
+from app.database.connection import Base, engine, get_db
 import app.models  # noqa: F401
 from app.routes.admin import router as admin_router
 from app.routes.auth import router as auth_router
@@ -32,8 +35,8 @@ app.add_middleware(
     secret_key=settings.session_secret.get_secret_value(),
     session_cookie="sbc_admin_session",
     max_age=settings.session_max_age_seconds,
-    same_site="none",
-    https_only=True,
+    same_site="none" if settings.environment == "production" else "lax",
+    https_only=settings.session_cookie_secure,
 )
 app.add_middleware(
     CORSMiddleware,
@@ -91,7 +94,15 @@ async def unexpected_error_handler(_request: Request, error: Exception) -> JSONR
 
 
 @app.get("/health", tags=["health"])
-def health() -> dict[str, str]:
+def health(database: Session = Depends(get_db)) -> dict[str, str]:
+    try:
+        database.execute(text("SELECT 1"))
+    except SQLAlchemyError as error:
+        logger.exception("Database health check failed", exc_info=error)
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Database unavailable",
+        ) from error
     return {"status": "ok"}
 
 

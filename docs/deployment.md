@@ -116,8 +116,7 @@ have different origins, set `settings.baseUrl` in `frontend/js/api.js` to the
 API origin. Requests include cookies for allowlisted origins. The public
 endpoint is `GET /api/tracking/{tracking_id}`. Admin login uses
 `POST /api/auth/login`; shipment CRUD uses `/api/admin/shipments` and signed,
-HTTP-only session cookies. `GET /health` is a lightweight process health check
-and does not verify database connectivity.
+HTTP-only session cookies. `GET /health` verifies both process responsiveness and database connectivity.
 
 ### Database, storage, and operations
 
@@ -127,11 +126,11 @@ managed PostgreSQL service and configure its automated backups, retention, and
 restore procedure. No user uploads or persistent local-file data are used by
 the app; frontend files are static files deployed with the repository.
 
-The health check confirms that the web process responds, not that PostgreSQL is
-reachable. Configure platform/database monitoring and alerts, and test
-database recovery before relying on production data. Protect the public service
-with platform-level request/rate controls as appropriate; the app has no
-application-level rate limiter.
+The health check returns `503` when PostgreSQL is unavailable. Configure
+platform/database monitoring and alerts, and test database recovery before
+relying on production data. Login attempts are limited per client address to
+reduce password-guessing abuse; retain platform-level request/rate controls as
+an additional defense.
 
 ### Troubleshooting
 
