@@ -462,9 +462,10 @@ and `/js/tracking.js`.
 
 The standard setup serves API and frontend from the same origin and does not
 need cross-origin requests. If using different origins, set `CORS_ORIGINS` to
-the exact frontend origin and make sure the frontend API client is explicitly
-configured to call the API host. Check the browser console and network
-requests.
+the exact frontend origin. The frontend client defaults to the deployed Render
+API origin; for a different backend host, add
+`<meta name="api-base-url" content="https://api.example.com">` to both
+frontend HTML pages. Check the browser console and network requests.
 
 ### Admin login works but subsequent requests appear logged out
 

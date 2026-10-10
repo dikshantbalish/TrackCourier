@@ -1,12 +1,15 @@
 (() => {
 	"use strict";
 
+	const defaultApiOrigin = "https://trackcourier-6hcj.onrender.com";
+	const configuredApiOrigin =
+		document.querySelector('meta[name="api-base-url"]')?.content.trim() || "";
+	const isLocalFile = window.location.origin === "null" || window.location.protocol === "file:";
+	const isKnownApiOrigin = window.location.origin === defaultApiOrigin;
 	const settings = {
 		baseUrl:
-			window.location.origin === "null" ||
-			window.location.protocol === "file:"
-				? "https://trackcourier-6hcj.onrender.com"
-				: window.location.origin,
+			configuredApiOrigin ||
+			(isLocalFile || !isKnownApiOrigin ? defaultApiOrigin : window.location.origin),
 		paths: {
 			tracking: "/api/tracking/{trackingId}",
 			login: "/api/auth/login",
