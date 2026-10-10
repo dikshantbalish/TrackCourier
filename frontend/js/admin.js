@@ -161,15 +161,15 @@
 		try {
 			records = await window.CourierApi.listShipments();
 			renderRecords();
+			return true;
 		} catch (error) {
 			if (error.kind === "unauthorized") {
-				managerPanel.hidden = true;
-				loginPanel.hidden = false;
-				showMessage(loginMessage, "Your session has expired. Please sign in again.");
+				showLogin("Your session has expired. Please sign in again.");
 			} else {
 				recordsList.replaceChildren();
 				showMessage(recordsMessage, friendlyError(error, "Unable to load shipment records."));
 			}
+			return false;
 		}
 	}
 
@@ -179,6 +179,18 @@
 		saveButton.textContent = "Save shipment";
 		cancelButton.hidden = true;
 		showMessage(shipmentMessage, "");
+	}
+
+	function showLogin(message = "") {
+		managerPanel.hidden = true;
+		loginPanel.hidden = false;
+		loginForm.reset();
+		showMessage(loginMessage, message);
+	}
+
+	function showManager() {
+		loginPanel.hidden = true;
+		managerPanel.hidden = false;
 	}
 
 	loginForm.addEventListener("submit", async (event) => {
@@ -199,15 +211,13 @@
 		try {
 			await window.CourierApi.login({ username, password });
 			loginForm.reset();
-			loginPanel.hidden = true;
-			managerPanel.hidden = false;
-			await refreshRecords();
+			if (!(await refreshRecords())) return;
+			showManager();
 		} catch (error) {
-			showMessage(
-				loginMessage,
+			showLogin(
 				error.kind === "unauthorized"
-					? "Sign-in details were not accepted."
-					: friendlyError(error, "Unable to sign in right now."),
+					? "Your sign-in session could not be established. Please try again."
+					: friendlyError(error, "Unable to load shipment records."),
 			);
 		} finally {
 			busy = false;
@@ -313,15 +323,14 @@
 	});
 
 	async function restoreSession() {
+		showLogin();
 		try {
 			await window.CourierApi.currentAdmin();
-			loginPanel.hidden = true;
-			managerPanel.hidden = false;
-			await refreshRecords();
+			if (!(await refreshRecords())) return;
+			showManager();
 		} catch (error) {
-			if (error.kind !== "unauthorized") {
+			if (error.kind !== "unauthorized")
 				showMessage(loginMessage, friendlyError(error, "Unable to restore your session."));
-			}
 		}
 	}
 
