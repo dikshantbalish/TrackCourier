@@ -111,10 +111,11 @@ and configure the health check at `/health`. Configure TLS and domain DNS
 through that provider.
 
 Serve the static frontend over HTTPS from an origin listed in `CORS_ORIGINS`.
-The frontend API wrapper uses the Render API origin when the frontend is hosted
-separately, and uses same-origin requests on the known Render API host. For a
-different backend host, add `<meta name="api-base-url" content="https://api.example.com">`
-to both frontend HTML pages. Requests include cookies for allowlisted origins.
+The Cloudflare Pages deployment includes a same-origin `/api/*` Pages Function
+proxy, so browser session cookies stay on the Cloudflare frontend origin instead
+of being treated as third-party cookies. The local file fallback still calls the
+Render API directly. For a different backend host, update `API_ORIGIN` in
+`functions/api/[[path]].js`. Requests include cookies for allowlisted origins.
 The public endpoint is `GET /api/tracking/{tracking_id}`. Admin login uses
 `POST /api/auth/login`; shipment CRUD uses `/api/admin/shipments` and signed,
 HTTP-only session cookies. `GET /health` verifies both process responsiveness and database connectivity.

@@ -5,11 +5,10 @@
 	const configuredApiOrigin =
 		document.querySelector('meta[name="api-base-url"]')?.content.trim() || "";
 	const isLocalFile = window.location.origin === "null" || window.location.protocol === "file:";
-	const isKnownApiOrigin = window.location.origin === defaultApiOrigin;
 	const settings = {
 		baseUrl:
 			configuredApiOrigin ||
-			(isLocalFile || !isKnownApiOrigin ? defaultApiOrigin : window.location.origin),
+			(isLocalFile ? defaultApiOrigin : window.location.origin),
 		paths: {
 			tracking: "/api/tracking/{trackingId}",
 			login: "/api/auth/login",
